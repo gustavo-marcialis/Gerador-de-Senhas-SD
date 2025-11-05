@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Senhas</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    
+    <style>
+        body {
+            background: linear-gradient(to bottom right, #00b4db, #0083b0);
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .box {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+        }
+
+        input[type="text"] {
+            font-size: 24px;
+            border: none;
+            margin-bottom: 20px;
+        }
+
+        button {
+            display: inline-block;
+            background-color: #00b4db;
+            color: #fff;
+            border: none;
+            border-radius: 25px;
+            font-size: 18px;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        #copiar {
+            background-color: #0083b0;
+        }
+
+        @media screen and (max-width: 600px) {
+            .box {
+                width: 80%;
+                height: 300px;
+            }
+            
+            input[type="text"] {
+                width: 90%;
+                height: 50px;
+                font-size: 28px;
+            }
+            
+            button {
+                padding: 12px 24px;
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
+        <h1 class="text-2xl font-bold mb-4 text-center">Gerador de Senhas</h1>
+        <div class="flex items-center gap-2 mb-2">
+            <input type="text" id="passwordOutput" class="w-full p-2 border border-gray-300 rounded-md text-center text-lg" readonly>
+            <button id="copyButton" class="bg-gray-200 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50">
+                Copiar
+            </button>
+        </div>
+        <div id="copyAlert" class="text-green-600 text-sm text-center opacity-0 transition-opacity duration-300 ease-in-out mb-4">
+            Senha copiada para a área de transferência!
+        </div>
+
+        <div class="mb-4">
+            <label for="passwordPattern" class="block text-gray-700 text-sm font-bold mb-2">Selecione o Padrão:</label>
+            <select id="passwordPattern" class="w-full p-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <option value="seguros_unimed">Seguros Unimed</option>
+                <option value="leroy_merlin">Leroy Merlin</option>
+                <option value="b3">B3</option>
+            </select>
+        </div>
+        
+        <button id="generateButton" class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+            Gerar Senha
+        </button>
+    </div>
+
+    <script>
+        // Nome da chave para guardar no cache (localStorage)
+        const CACHE_KEY = 'lastPasswordPattern';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Referências aos elementos DOM
+            const generateButton = document.getElementById('generateButton');
+            const copyButton = document.getElementById('copyButton');
+            const passwordOutput = document.getElementById('passwordOutput');
+            const copyAlert = document.getElementById('copyAlert');
+            const passwordPatternSelect = document.getElementById('passwordPattern');
+
+            // --- Lógica de Cache (localStorage) ---
+            
+            /**
+             * 1. Carrega o último padrão selecionado do cache e aplica.
+             * Isso garante que a última seleção do usuário seja mantida.
+             */
+            const loadCachedPattern = () => {
+                const cachedPattern = localStorage.getItem(CACHE_KEY);
+                if (cachedPattern) {
+                    passwordPatternSelect.value = cachedPattern;
+                }
+            };
+
+            /**
+             * 2. Salva o padrão atual no cache (chamado no evento 'change' ou 'click').
+             */
+            const saveCurrentPattern = () => {
+                localStorage.setItem(CACHE_KEY, passwordPatternSelect.value);
+            };
+
+            // Aplica o cache ao carregar a página
+            loadCachedPattern();
+
+            // Salva o padrão sempre que a seleção muda
+            passwordPatternSelect.addEventListener('change', saveCurrentPattern);
+
+            // --- Funções de Geração de Senha (inalteradas da versão anterior) ---
+            
+            const generateSegurosUnimedPassword = () => {
+                const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
+                const numbers = '0123456789';
+                const requiredChar = '@';
+                const allChars = lowercaseChars + numbers;
+
+                let password = '';
+                const passwordLength = 12;
+
+                const atIndex = Math.floor(Math.random() * passwordLength);
+                
+                for (let i = 0; i < passwordLength; i++) {
+                    if (i === atIndex) {
+                        password += requiredChar;
+                    } else {
+                        const randomIndex = Math.floor(Math.random() * allChars.length);
+                        password += allChars[randomIndex];
+                    }
+                }
+                return password;
+            };
+
+            const generateLeroyMerlinPassword = () => {
+                // Padrão repetido temporariamente
+                return generateSegurosUnimedPassword();
+            };
+
+            const generateB3Password = () => {
+                // Padrão repetido temporariamente
+                return generateSegurosUnimedPassword();
+            };
+            
+            const generatePassword = () => {
+                const selectedPattern = passwordPatternSelect.value;
+                
+                switch (selectedPattern) {
+                    case 'seguros_unimed':
+                        return generateSegurosUnimedPassword();
+                    case 'leroy_merlin':
+                        return generateLeroyMerlinPassword();
+                    case 'b3':
+                        return generateB3Password();
+                    default:
+                        return generateSegurosUnimedPassword();
+                }
+            };
+
+            // --- Lógica de Cópia (inalterada) ---
+
+            const copyPassword = async () => {
+                if (passwordOutput.value) {
+                    try {
+                        await navigator.clipboard.writeText(passwordOutput.value);
+                        
+                        copyAlert.classList.remove('opacity-0');
+                        copyAlert.classList.add('opacity-100');
+
+                        setTimeout(() => {
+                            copyAlert.classList.remove('opacity-100');
+                            copyAlert.classList.add('opacity-0');
+                        }, 2000);
+                    } catch (err) {
+                        console.error('Falha ao copiar a senha: ', err);
+                    }
+                }
+            };
+
+            // --- Event Listeners e Inicialização ---
+            
+            generateButton.addEventListener('click', () => {
+                // Salva a seleção ANTES de gerar a senha (redundância para garantir o cache)
+                saveCurrentPattern(); 
+                passwordOutput.value = generatePassword();
+            });
+
+            copyButton.addEventListener('click', copyPassword);
+
+            // REMOVIDO: passwordOutput.value = generatePassword();
+            // O campo agora inicia vazio (ou com a última senha que o usuário gerou/copiou).
+            passwordOutput.value = ''; 
+        });
+    </script>
+</body>
+</html>
