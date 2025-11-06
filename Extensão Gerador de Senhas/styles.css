@@ -1,0 +1,49 @@
+/* 1. COR DE FUNDO ALTERADA para #468cee */
+        
+        body {
+            /* Adicionado tamanho fixo para o popup */
+            width: 380px; 
+            min-height: 200px; 
+            
+            /* Propriedades mantidas */
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7; 
+        }
+
+        /* Os estilos a seguir são mantidos do original */
+        input[type="text"] {
+            font-size: 24px;
+            border: none;
+            margin-bottom: 20px;
+        }
+
+        button {
+            display: inline-block;
+            background-color: #00b4db; 
+            color: #fff;
+            border: none;
+            border-radius: 25px;
+            font-size: 18px;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        #copiar {
+            background-color: #0083b0;
+        }
+
+        @media screen and (max-width: 600px) {
+            /* As media queries são ajustadas para o contêiner interno */
+            
+            input[type="text"] {
+                width: 90%;
+                height: 50px;
+                font-size: 28px;
+            }
+            
+            button {
+                padding: 12px 24px;
+                font-size: 20px;
+            }
+        }

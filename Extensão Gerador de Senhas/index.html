@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Senhas</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+<body class="bg-gray-100">
+    
+    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
+        <div class="flex justify-center mb-4">
+            <img src="New-Atos-logo-blue-RGB.png" alt="Logo New Atos" class="h-10"> 
+        </div>
+        <h1 class="text-2xl font-bold mb-4 text-center">Gerador de Senhas</h1>
+        <div class="flex items-center gap-2 mb-2">
+            <input type="text" id="passwordOutput" class="w-full p-2 border border-gray-300 rounded-md text-center text-lg" readonly>
+            <button id="copyButton" class="bg-gray-200 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50">
+                Copiar
+            </button>
+        </div>
+        <div id="copyAlert" class="text-green-600 text-sm text-center opacity-0 transition-opacity duration-300 ease-in-out mb-4">
+            Senha copiada para a área de transferência!
+        </div>
+
+        <div class="mb-4">
+            <label for="passwordPattern" class="block text-gray-700 text-sm font-bold mb-2">Selecione o Padrão:</label>
+            <select id="passwordPattern" class="w-full p-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <option value="seguros_unimed">Seguros Unimed</option>
+                <option value="leroy_merlin">Leroy Merlin</option>
+                <option value="b3">B3</option>
+            </select>
+        </div>
+        
+        <button id="generateButton" class="w-full text-white py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-opacity-50" 
+                style="background-color: #468cee; hover:background-color: #3b74c8; focus:ring-blue-500;">
+            Gerar Senha
+        </button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
