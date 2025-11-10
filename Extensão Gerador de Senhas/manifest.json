@@ -15,5 +15,8 @@
     "permissions": [
         "storage",
         "clipboardWrite"
+    ],
+    "host_permissions": [
+        "https://hapnzfaqqyevewsxblht.supabase.co/"
     ]
 }
