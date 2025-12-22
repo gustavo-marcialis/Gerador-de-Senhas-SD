@@ -1,0 +1,19 @@
+name: Prevent Supabase Hibernation
+
+on:
+  schedule:
+    # Roda toda Segunda e Quinta às 00:00 UTC
+    - cron: '0 0 * * 1,4'
+  workflow_dispatch:
+
+jobs:
+  ping_supabase:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Ping Supabase API (Users Table)
+        run: |
+          curl -f -X GET "${{ secrets.SUPABASE_URL }}/rest/v1/auth/users?select=id&limit=1" \
+          -H "apikey: ${{ secrets.SUPABASE_KEY }}" \
+          -H "Authorization: Bearer ${{ secrets.SUPABASE_KEY }}" \
+          -v
