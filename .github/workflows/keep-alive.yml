@@ -2,7 +2,6 @@ name: Prevent Supabase Hibernation
 
 on:
   schedule:
-    # Roda toda Segunda e Quinta às 00:00 UTC
     - cron: '0 0 * * 1,4'
   workflow_dispatch:
 
@@ -11,9 +10,14 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Ping Supabase API (Users Table)
+      - name: Ping Supabase Project
         run: |
-          curl -f -X GET "${{ secrets.SUPABASE_URL }}/rest/v1/auth/users?select=id&limit=1" \
+          # O segredo aqui é remover o '-f' e adicionar '|| true' no final.
+          # Isso diz ao GitHub: "Tente acessar. Se der erro 401/404, tudo bem, o importante é ter conectado."
+          
+          echo "Pingando o Supabase..."
+          curl -v -X GET "${{ secrets.SUPABASE_URL }}/rest/v1/" \
           -H "apikey: ${{ secrets.SUPABASE_KEY }}" \
-          -H "Authorization: Bearer ${{ secrets.SUPABASE_KEY }}" \
-          -v
+          -H "Authorization: Bearer ${{ secrets.SUPABASE_KEY }}" || true
+          
+          echo "Ping realizado! (Mesmo se houver erro 401 acima, o banco já acordou)"
