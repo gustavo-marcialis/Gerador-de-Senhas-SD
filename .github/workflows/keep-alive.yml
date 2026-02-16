@@ -9,7 +9,15 @@ jobs:
   ping_supabase:
     runs-on: ubuntu-latest
     
+    # Define permissão de escrita para que o bot consiga dar o "push" no commit vazio
+    permissions:
+      contents: write
+    
     steps:
+      # Passo necessário para acessar o repositório e fazer o commit depois
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
       - name: Ping Supabase Project
         run: |
           # O segredo aqui é remover o '-f' e adicionar '|| true' no final.
@@ -21,3 +29,11 @@ jobs:
           -H "Authorization: Bearer ${{ secrets.SUPABASE_KEY }}" || true
           
           echo "Ping realizado! (Mesmo se houver erro 401 acima, o banco já acordou)"
+
+      # Novo passo para evitar a desativação do workflow por inatividade
+      - name: Keep workflow active
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git commit --allow-empty -m "Keep-alive: prevent workflow hibernation"
+          git push
